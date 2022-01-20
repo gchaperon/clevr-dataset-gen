@@ -278,7 +278,7 @@ def other_heuristic(text, param_vals):
         v1 = param_vals.get(k1, None)
         v2 = param_vals.get(k2, None)
         if v1 != "" and v2 != "" and v1 != v2:
-            print("other has got to go! %s = %s but %s = %s" % (k1, v1, k2, v2))
+            # print("other has got to go! %s = %s but %s = %s" % (k1, v1, k2, v2))
             remove_other = True
             break
     if remove_other:
