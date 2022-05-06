@@ -18,23 +18,24 @@ out = {
 
 args.paths.sort(key=get_start_idx)
 
-with contextlib.ExitStack() as stack:
-    question_dicts = []
-    for path in args.paths:
+question_dicts = []
+
+for path in args.paths:
+    with open(path) as file:
         print(f"Reading {path}")
-        question_dicts.append(json.load(stack.enter_context(open(path))))
+        question_dicts.append(json.load(file))
 
-    split = question_dicts[0]["info"]["split"]
-    assert all(
-        qd["info"]["split"] == split for qd in question_dicts
-    ), "You are mixing splits dawg :-/"
+split = question_dicts[0]["info"]["split"]
+assert all(
+    qd["info"]["split"] == split for qd in question_dicts
+), "You are mixing splits dawg :-/"
 
-    for qd in question_dicts:
-        qd["questions"].sort(key=operator.itemgetter("question_index"))
+for qd in question_dicts:
+    qd["questions"].sort(key=operator.itemgetter("question_index"))
 
-    for i, q in enumerate(q for qd in question_dicts for q in qd["questions"]):
-        q["question_index"] = i
-        out["questions"].append(q)
+for i, q in enumerate(q for qd in question_dicts for q in qd["questions"]):
+    q["question_index"] = i
+    out["questions"].append(q)
 
 with open(args.out_path, "w") as out_file:
     print(f"Writing to {args.out_path}")
