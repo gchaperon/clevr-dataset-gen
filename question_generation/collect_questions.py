@@ -3,6 +3,7 @@ import argparse, pathlib, json, operator, contextlib
 parser = argparse.ArgumentParser()
 parser.add_argument("paths", metavar="FILE", type=pathlib.Path, nargs="+")
 parser.add_argument("--out-file", dest="out_path", type=pathlib.Path, required=True)
+parser.add_argument("--clean", action="store_true")
 
 args = parser.parse_args()
 
@@ -40,3 +41,7 @@ for i, q in enumerate(q for qd in question_dicts for q in qd["questions"]):
 with open(args.out_path, "w") as out_file:
     print(f"Writing to {args.out_path}")
     json.dump(out, out_file)
+
+if args.clean:
+    for path in args.paths:
+        path.unlink()
